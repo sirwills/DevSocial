@@ -15,8 +15,12 @@
     // verify token
 
     try {
-        const decode = jwt.verify(token, JWT_SECRET)
+        const decoded = jwt.verify(token, JWT_SECRET)
+        req.user = decoded.user
+        next();
     } catch (error) {
-        
+        res.status(401).json({msg: 'Token is not valid'})
     }
  }
+
+ module.exports = verifyToken;

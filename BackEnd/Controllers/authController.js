@@ -78,4 +78,52 @@ authController.post('/register',[
     }
 })
 
+
+authController.post('/login', [
+    check('email', 'Email is required').isEmail(),
+    check('password', 'Password is required')
+    .exists()
+], async(req, res) =>{
+
+    try {
+
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors: errors.array()});
+
+        }
+
+
+        const userDetails = req.body;
+
+        const {username, email} = userDetails;
+
+    // check if the user exist
+        const existingUser = await User.findOne({$or: [{email}, {username}]});
+        if(!existingUser){
+        return res.status(400).json({errors: [{msg: 'Invalid Credentials '}]})
+        }
+
+        const comparePasswrod = await bcrypt.compare(req.body.password, existingUser.password)
+        if(!comparePasswrod){
+            return res.status(400).json({errors: [{msg: 'Invalid Credentials'}]})
+        }
+
+        const {password, ...others} = existingUser._doc;
+
+        const token = jwt.sign({id: existingUser._id}, JWT_SECRET, {expiresIn: '40hr'})
+
+        existingUser.toke = token
+
+        res.status(200).json({others, token})
+
+
+    } catch (error) {
+
+        console.error(error)
+        res.status(500).send('Server error')
+        
+    }
+})
+
 module.exports = authController;
