@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../../model/User');
 
 router.get('/', [], (req, res)=> {
-    return console.log('Profile route')
+    return res.status(200).send('Profile Route')
      
 })
 
