@@ -19,7 +19,7 @@ app.use(express.json())
 app.use('/api/users', registration)
 app.use('/api/auth', auth )
 app.use('/api/profile', profile)
-app.use('/api/post', post)
+app.use('/api/posts', post)
 
 
 app.listen(PORT, ()=>console.log(`Server Stared at ${process.env.PORT}`))
