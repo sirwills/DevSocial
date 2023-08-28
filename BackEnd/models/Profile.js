@@ -30,6 +30,6 @@ const mongoose = require('mongoose');
     }
  }); 
 
- module.exports = Profile = mongoose.module('profile', ProfileSchema)
+ module.exports = Profile = mongoose.model('profile', ProfileSchema)
 
  
